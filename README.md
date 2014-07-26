@@ -9,7 +9,7 @@ This program is licensed under GPLv3.
 ##Installation
 Clone this repository using:
 
-    git clone https://www.github.com/ytisf/Muninn
+    git clone https://www.github.com/ytisf/muninn
 
 Make sure you have all the dependencies installed:
 
