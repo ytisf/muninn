@@ -34,6 +34,8 @@ The basic command line arguments for Muninn are:
 
 The image location and case number are mandatory.
 
+Muninn can be tested using the [memory dumps](https://code.google.com/p/volatility/wiki/PublicMemoryImages) which were published by the guys of Volatility here
+
 
 ##Documentation
 Basic structure of Muninn is:
