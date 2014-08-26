@@ -70,20 +70,21 @@ class VolatiltyHandler():
 		:return: Will return a 1 in case of an error
 		'''
 
-		self._shit_handler.error_log(1, "Getting image type")
+		self._shit_handler.error_log(1, "Getting image type...")
 
 		self._image_location = str(imagelocation)
 
 		command = self._volname + " -f " + str(imagelocation) + " imageinfo | grep -e \"\s*Sugg\""
 		status, output = commands.getstatusoutput(command)
-		regi = "[\" : \"](.+)\,"
+		regi = "(Win[A-Za-z0-9]+)"
 		status = 0
 
 		if status == 0:
 			jibbily = self.regex_search(output, regi)
-			jibbily = jibbily.groups()
-			jibbily = jibbily[0]
-			jibbily = jibbily[32:]
+			if jibbily is None:
+				self._shit_handler.error_log(4, "Image type error!\n%s" % output)
+			jibbily = str(jibbily.groups(1))
+			jibbily = jibbily[2:-3]
 			self._image_type = jibbily
 		else:
 			self._shit_handler.error_log(4, "Did not detect imagetype.")
