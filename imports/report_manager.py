@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
+import os
 import sys
+import random
 
 try:
 	from prettytable import PrettyTable
@@ -21,11 +23,32 @@ class Secretary():
 		self._file_handler = ""
 		self._br = "\n###########################################################################\n\n"
 
+	def get_file_name(self, case_num):
+		if os.path.isfile("CS%s.txt" % case_num) is None:
+			return "CS%s.txt" % case_num
+		else:
+			number = random.randint(1, 30)
+			return "CS" + str(case_num) + "-" + number + ".txt"
 
 	def InitiateDocument(self, casenumber, date, filename, md5, imagetype):
-		self._shit_handler.error_log(1, "Starting to create document at CS-%s.txt" % casenumber)
+		'''
+		This function will create the basic file and template of the report.
+		It will generate the heading and the basic information of the forensics
+		investigation.
+		:param casenumber: integer, case number
+		:param date: current date
+		:param filename: filename of the memory image
+		:param md5: md5sum to document
+		:param imagetype: which type has the image been deteced as
+		:return:
+		'''
 		self._title = "Memory Report - CS-%s" % casenumber
-		self._file_handler = open("CS%s.txt" % casenumber, 'wb')
+		curr_filename = self.get_file_name(casenumber)
+		if curr_filename == ("CS-%s.txt" % casenumber):
+			self._shit_handler.error_log(1, "Starting to create document at CS-%s.txt" % casenumber)
+		else:
+			self._shit_handler.error_log(1, "A file named 'CS-"+str(casenumber)+".txt' already exists.\n\tCreating file as '" + curr_filename + "'")
+		self._file_handler = open(curr_filename, 'wb')
 		self._file_handler.write("###########################################################################\n")
 		self._file_handler.write("###########################################################################\n")
 		self._file_handler.write("\t\t\t#%s\n" % self._title)
