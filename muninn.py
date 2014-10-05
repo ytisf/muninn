@@ -2,8 +2,8 @@
 
 __name__ = "Muninn"
 __authors__ = ["Yuval tisf Nativ", "Omree Benari"]
-__version__ = 0.2
-__version_name__ = "beta"
+__version__ = 0.3
+__version_name__ = "charlie"
 __license__ = "GPLv3"
 
 import sys
@@ -151,6 +151,7 @@ for each in vol._hives:
 	hive_array.append(array)
 
 doc.print_title("Hive List (%s)" % len(hive_array), 3)
+doc.pri
 doc.print_table(hive_header, hive_array, hive_header[1])
 
 

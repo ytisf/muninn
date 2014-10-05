@@ -2,6 +2,7 @@
 
 import os
 import re
+import sys
 import hashlib
 import commands
 
@@ -13,6 +14,7 @@ class VolatiltyHandler():
 	This class will run volatility with particular arguments and will
 	manage the output from it.
 	'''
+
 	def __init__(self):
 		self._volatility_handler = ""
 		self._shit_handler = imports.error_handler.Shit_Handler()
@@ -33,14 +35,47 @@ class VolatiltyHandler():
 		self._drivers = []
 
 
+	def query_yes_no(self, question, default="no"):
+		"""Ask a yes/no question via raw_input() and return their answer.
+
+		"question" is a string that is presented to the user.
+		"default" is the presumed answer if the user just hits <Enter>.
+			It must be "yes" (the default), "no" or None (meaning
+			an answer is required of the user).
+
+		The "answer" return value is one of "yes" or "no".
+		"""
+
+		valid = {"yes": True, "y": True, "ye": True,
+			"no": False, "n": False}
+		if default is None:
+			prompt = " [y/n] "
+		elif default == "yes":
+			prompt = " [Y/n] "
+		elif default == "no":
+			prompt = " [y/N] "
+		else:
+			raise ValueError("invalid default answer: '%s'" % default)
+
+		while True:
+			sys.stdout.write(question + prompt)
+			choice = raw_input().lower()
+			if default is not None and choice == '':
+				return valid[default]
+			elif choice in valid:
+				return valid[choice]
+			else:
+				sys.stdout.write("Please respond with 'yes' or 'no' "
+					"(or 'y' or 'n').\n")
+
 	def regex_search(self, data, regex):
-		'''
+		"""
 		This function runs regex search on data given
 		and returns output.
 		:data the data to run through the filter
 		:regex the regex query
 		:return the filtered result of the search
-		'''
+		"""
 		results = re.search(regex, data)
 		return results
 
@@ -49,12 +84,30 @@ class VolatiltyHandler():
 		'''
 		This function checks if volatility exists as vol.py.
 		If it does not, it throws a type 4 error to shit_handler and exists
+		After version 0.3 it tries to install Volatility for you.
+		Only verified Ubuntu installation
 		'''
 		status, output = commands.getstatusoutput("vol.py")
 		if int(status) == 256:
 			self._is_vol_okay = 1
 		else:
-			self._shit_handler.error_log(5, "Volatility was not found.")
+			if self.query_yes_no("Should I try to install Volatility for you?"):
+				if os.geteuid() != 0:
+					self._shit_handler.error_log(5, "To install volatility run again with 'sudo'.")
+				else:
+					os.system("sudo add-apt-repository -y ppa:pi-rho/security")
+					os.system("sudo apt-get update")
+					os.system("sudo apt-get install -y volatility")
+					status, output = commands.getstatusoutput("vol.py")
+					if int(status) == 256:
+						self._shit_handler.error_log(1, "Volatility was successfully installed.")
+						self._is_vol_okay = 1
+					else:
+						self._shit_handler.error_log(5, "Volatility installation's failed!")
+						self._is_vol_okay = 0
+			else:
+				self._shit_handler.error_log(5, "You need to install volatility...")
+				self._is_vol_okay = 0
 
 
 	def get_image_type(self, imagelocation):
