@@ -17,7 +17,7 @@ import imports.report_manager
 
 # Muninn - An Automatic Initial Memory Forensics Tool
 # Copyright (C) 2014 Yuval tisf Nativ
-#
+#``
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -151,7 +151,6 @@ for each in vol._hives:
 	hive_array.append(array)
 
 doc.print_title("Hive List (%s)" % len(hive_array), 3)
-doc.pri
 doc.print_table(hive_header, hive_array, hive_header[1])
 
 
@@ -208,5 +207,3 @@ for each in vol._drivers:
 
 doc.print_title("Drivers (%s)" % len(driver_array), 3)
 doc.print_table(driver_header, driver_array, driver_header[0])
-
-

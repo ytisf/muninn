@@ -28,7 +28,7 @@ class Secretary():
 			return "CS%s.txt" % case_num
 		else:
 			number = random.randint(1, 30)
-			return "CS" + str(case_num) + "-" + number + ".txt"
+			return "CS%s-%s.txt" % (case_num, number)
 
 	def InitiateDocument(self, casenumber, date, filename, md5, imagetype):
 		'''
@@ -104,9 +104,3 @@ class Secretary():
 	def save(self):
 		self._file_handler.close()
 		self._shit_handler.error_log(0, "Report CS-%s.txt is ready!" % self._casenumber)
-
-
-
-
-
-
